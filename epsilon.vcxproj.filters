@@ -80,6 +80,9 @@
     <ClCompile Include="multi_index.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="exp.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

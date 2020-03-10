@@ -264,7 +264,11 @@ namespace fms {
 		size_t size() {
 			return m_lpBuf.size();
 		}
-	
+		
+		double norm(double p = 1) const
+		{
+			return std::pow(pow(abs(m_lpBuf), p).sum(), double(1) / p);
+		}
 	};
 }
 inline fms::multi_epsilon operator + (fms::multi_epsilon A, const fms::multi_epsilon& B)
@@ -316,4 +320,12 @@ inline fms::multi_epsilon operator / (fms::multi_epsilon A, const double& B)
 inline fms::multi_epsilon operator / (const double& B, fms::multi_epsilon A)
 {
 	return A /= B;
+}
+inline double fabs(const fms::multi_epsilon& a)
+{
+	return a.norm(double(1));
+}
+inline double norm(const fms::multi_epsilon& a, const double& p = 1)
+{
+	return a.norm(p);
 }
