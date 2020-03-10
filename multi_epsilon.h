@@ -29,7 +29,9 @@ namespace fms {
 
 		
 		multi_epsilon(const std::initializer_list<double>& rhs, size_t m, size_t n)
-			:m_lpBuf(rhs), N(n+1), m(m) { };
+			:m_lpBuf(rhs), N(n + 1), m(m) {
+			assert(pow(n + 1, m) == m_lpBuf.size());
+		};
 
 		multi_epsilon(multi_epsilon&& rhs) noexcept {
 			this->N = rhs.N;

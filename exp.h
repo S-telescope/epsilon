@@ -10,7 +10,7 @@ namespace fms {
 	template<class X>
 	inline X exp_brute(const X& x)
 	{
-		X ex = 1;
+		auto ex = 1 + 0*x;
 		X xn_(x); // x^n/n! 1
 
 		int n = 1;
@@ -39,7 +39,7 @@ namespace fms {
 
 	multi_epsilon exp(const multi_epsilon& x) {
 		auto res=::exp(x[0])+0*x;
-		res *= exp_brute(x - res);
+		res *= exp_brute(x - x[0]);
 		return res;
 	}
 }

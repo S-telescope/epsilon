@@ -90,20 +90,38 @@ int test_expn_higher_order()
 }
 static int test_expn_higher_order_double = test_expn_higher_order<3, double>();
 
+int test_multi_exp() {
+	using X= double;
+	X x = 10;
+	auto x_ = fms::multi_epsilon::identity(2,2)*x;
+	X ex = fms::exp(x);
 
-template<class X>
-X p(const X& x)
-{
-	return 1 + 2 * x + 3 * x * x;
+	X dx = ex - ::exp(x);
+	assert(fabs(dx) <= 2 * std::numeric_limits<X>::epsilon());
+
+	auto x__=fms::multi_epsilon({ 10,2,0.1 }, 1, 2);
+
+	std::vector<X> expx({ ::exp(10),::exp(10) * 2, ::exp(10) * 2.1 });
+
+	auto ex_ = fms::exp(x__);
+	assert(fabs(ex_[0] - expx[0]) <= 0 * std::numeric_limits<X>::epsilon());
+	assert(fabs(ex_[1] - expx[1]) <= 0 * std::numeric_limits<X>::epsilon());
+	assert(fabs(ex_[2] - expx[2]) <= 0 * std::numeric_limits<X>::epsilon());
+	
+	auto y_ = fms::multi_epsilon({ 10,2,0.1,10 }, 2, 1);
+
+	std::vector<X> expy({ ::exp(10),::exp(10) * 2, ::exp(10)*0.1, ::exp(10) * 10.2 });
+
+	auto ey_ = fms::exp(y_);
+	assert(fabs(ey_[0] - expy[0]) <= 0 * std::numeric_limits<X>::epsilon());
+	assert(fabs(ey_[1] - expy[1]) <= 0 * std::numeric_limits<X>::epsilon());
+	assert(fabs(ey_[2] - expy[2]) <= 0 * std::numeric_limits<X>::epsilon());
+	assert(fabs(ey_[3] - expy[3]) <= 0 * std::numeric_limits<X>::epsilon());
+
+	
+	
+	return 0;
 }
-template<class X>
-X dp(const X& x)
-{
-	return 2 + 6 * x;
-}
-template<class X>
-X ddp([[maybe_unused]] const X& x)
-{
-	return 6;
-}
+
+static int test_multi_exp_double = test_multi_exp();
 
