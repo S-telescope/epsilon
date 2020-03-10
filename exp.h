@@ -28,7 +28,7 @@ namespace fms {
 	
 	template<size_t N, class X = double>
 	epsilon<N, X> exp(const epsilon<N, X>& x) {
-		epsilon<N, X> res(exp_brute<N, X>(x[0], 0));
+		epsilon<N, X> res(exp(x[0]));
 		res *= exp_brute(x - epsilon<N, X>(x[0]));
 		return res;
 	}
@@ -38,8 +38,8 @@ namespace fms {
 	}
 
 	multi_epsilon exp(const multi_epsilon& x) {
-		epsilon<N, X> res(::exp(x[0], 0));
-		res *= exp_brute(x - multi_epsilon(x[0]));
+		auto res=::exp(x[0])+0*x;
+		res *= exp_brute(x - res);
 		return res;
 	}
 }
