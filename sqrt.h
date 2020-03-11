@@ -14,7 +14,7 @@ namespace fms {
 		auto ex = 0 * x + 1;
 		X xn_(x-1); // (x-1)^n * nCr(1/2,n) 
 		xn_ /= 2;
-		int n = 0;
+		int n = 1;
 		while (fabs(xn_) + X(1) != X(1)) {
 			
 			ex += xn_;
