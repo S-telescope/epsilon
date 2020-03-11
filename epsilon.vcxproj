@@ -171,6 +171,7 @@
     <ClCompile Include="exp.t.cpp" />
     <ClCompile Include="expression.t.cpp" />
     <ClCompile Include="hermite.t.cpp" />
+    <ClCompile Include="log.t.cpp" />
     <ClCompile Include="mul.t.cpp" />
     <ClCompile Include="multinomial.t.cpp" />
     <ClCompile Include="multi_index.t.cpp" />

@@ -147,6 +147,14 @@ namespace fms {
             return *this;
         }
 
+		epsilon operator-()
+		{
+			auto res = *this;
+			res *= -1.0;
+
+			return res;
+		}
+
 		X norm(X p = 1) const
 		{
 			return std::pow(pow(abs(a), p).sum(), X(1)/p);
@@ -234,10 +242,10 @@ inline fms::epsilon<N, X> operator/(const Y& a, fms::epsilon<N, X> b)
     return (a + fms::epsilon<N,X>()) /= b;
 }
 
-template<size_t N, class X, class = IsArithmetic<X>>
+/*template<size_t N, class X, class = IsArithmetic<X>>
 inline fms::epsilon<N, X> operator-(const fms::epsilon<N, X>& x)
 {
     return X(-1) * x;
-}
+}*/
 
 

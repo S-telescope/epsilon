@@ -173,7 +173,7 @@ int mul_test3() {
 	//test d^3q/dxdydz|(x=1.0,y=2.0,z=3.0)
 	index = multi_epsilon::rep({ 1,1,1 }, 1);
 	assert(dq(0, index) == d3q_dx_dy_dz(x, y, z));
-	cout << "Test suceessfully ends." << endl;
+	
 	return 0;
 }
 template<class X>
