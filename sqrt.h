@@ -45,3 +45,8 @@ namespace fms {
 		return res;
 	}
 }
+
+/*inline fms::multi_epsilon sqrt(const fms::multi_epsilon& a)
+{
+	return fms::sqrt(a);
+}*/

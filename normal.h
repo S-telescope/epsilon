@@ -34,7 +34,7 @@ namespace fms {
 	//		=2/sqrt(pi) [Int_0^aI exp(-t*t) dt + exp(-a*a) B + exp(-a*a)'/2 B^2 + ...]
 	//		=erf(a) I + 2/sqrt(pi) [exp(-a*a) B + exp(-a*a)'/2 B^2 + ...]
 	template<size_t N, class X = double>
-	epsilon<N, X> erf(const epsilon<N, X>& x) {
+	inline epsilon<N, X> erf(const epsilon<N, X>& x) {
 		epsilon<N, X> res(erf_brute(x[0]));
 		epsilon<N, X> B = x - epsilon<N, X>(x[0]);
 
@@ -53,6 +53,10 @@ namespace fms {
 	}
 
 	
+	inline double erf(const double& a) {
+		return std::erf(a);
+	}
+	
 
 	template<class X>
 	X f(X i) { return exp(-i * i); };
@@ -63,8 +67,12 @@ namespace fms {
 
 		auto factorial = [](const size_t& i) {return std::tgamma(i + 1); };
 		X res = 0;
-		for (size_t k = 0; k <= std::floor(N / 2.0); k++) {
-			res += pow(-4, -1 * k) * pow(x, -2 * k) / factorial(k) / factorial(-2 * k + N);
+		for (size_t k = 0; k <= std::floor((X)N / 2.0); k++) {
+			auto a = pow(-4, -1 * k);
+			auto b = pow(x, -2 * k);
+			auto c = factorial(k);
+			auto d = factorial(-2 * k + N);
+			res += pow(-4, -1 * (X)k) * pow(x, -2 * (X)k) / factorial(k) / factorial(-2 * k + N);
 		}
 		return res * pow(2.0, (X)N) * ::exp(-x * x) * pow(-x, (X)N);
 	}
@@ -78,7 +86,8 @@ namespace fms {
 
 
 		int n = 1;
-		while (n <= x.get_N() && fabs(Bn_) + X(1) != X(1)) {
+		while (n <= x.get_N() && fabs(Bn_) + 1 != 1) {
+			auto t = Dexp(n - 1, x[0]);
 			res += Bn_ * M_2_SQRTPI * Dexp(n - 1, x[0]);
 			Bn_ *= B / ++n;
 		}
@@ -93,7 +102,7 @@ namespace fms {
 	}
 
 	template<class X>
-	inline auto cdf(const X& x)
+	inline X cdf(const X& x)
 	{
 		return erf(x * M_SQRT1_2) * 0.5 + 0.5;
 	}
@@ -102,7 +111,7 @@ namespace fms {
 
 	
 }
-inline fms::multi_epsilon exp(const fms::multi_epsilon& a)
+/*inline fms::multi_epsilon exp(const fms::multi_epsilon& a)
 {
 	return fms::exp(a);
 }
@@ -113,4 +122,7 @@ inline fms::multi_epsilon erf(const fms::multi_epsilon& a)
 inline fms::multi_epsilon cdf(const fms::multi_epsilon& a)
 {
 	return fms::cdf(a);
+}*/
+inline double cdf(const double& a) {
+	return 0.5 * std::erfc(-a * M_SQRT1_2);
 }
