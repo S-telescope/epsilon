@@ -152,6 +152,7 @@
     <ClInclude Include="bell.h" />
     <ClInclude Include="epsilon.h" />
     <ClInclude Include="exp.h" />
+    <ClInclude Include="sqrt.h" />
     <ClInclude Include="hermite.h" />
     <ClInclude Include="multi_epsilon.h" />
     <ClInclude Include="multi_index.h" />
@@ -174,6 +175,8 @@
     <ClCompile Include="multi_index.t.cpp" />
     <ClCompile Include="norm.t.cpp" />
     <ClCompile Include="normal.t.cpp" />
+    <ClCompile Include="option.cpp" />
+    <ClCompile Include="sqrt.t.cpp" />
     <ClCompile Include="sub.t.cpp" />
   </ItemGroup>
   <ItemGroup>

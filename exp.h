@@ -13,7 +13,7 @@ namespace fms {
 		X xn_(x); // x^n/n! 1
 
 		int n = 1;
-		while (fabs(xn_) + X(1) != X(1)) {
+		while (fabs(xn_) + 1 != 1) {
 			ex += xn_;
 			xn_ *= x / ++n;
 		}

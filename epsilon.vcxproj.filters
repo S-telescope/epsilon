@@ -39,6 +39,9 @@
     <ClInclude Include="normal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sqrt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="epsilon.t.cpp">
@@ -87,6 +90,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="normal.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="option.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqrt.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

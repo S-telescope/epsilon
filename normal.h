@@ -102,3 +102,15 @@ namespace fms {
 
 	
 }
+inline fms::multi_epsilon exp(const fms::multi_epsilon& a)
+{
+	return fms::exp(a);
+}
+inline fms::multi_epsilon erf(const fms::multi_epsilon& a)
+{
+	return fms::erf(a);
+}
+inline fms::multi_epsilon cdf(const fms::multi_epsilon& a)
+{
+	return fms::cdf(a);
+}
