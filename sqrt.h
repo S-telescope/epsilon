@@ -15,10 +15,10 @@ namespace fms {
 		X xn_(x-1); // (x-1)^n * nCr(1/2,n) 
 		xn_ /= 2;
 		int n = 1;
-		while (fabs(xn_) + X(1) != X(1)) {
-			
+		while (fabs(xn_) + 1 != 1) {
 			ex += xn_;
-			xn_ *= (x-1) * (0.5 - n) / ++n ;
+			xn_ *= (x-1) * (0.5 - n) / (n+1) ;
+			++n;
 		}
 
 		return ex;
