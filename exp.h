@@ -1,4 +1,3 @@
-#pragma once
 // exp.h - exponential function
 #pragma once
 #include "epsilon.h"
@@ -27,17 +26,17 @@ namespace fms {
 	}
 	
 	template<size_t N, class X = double>
-	epsilon<N, X> exp(const epsilon<N, X>& x) {
+	inline epsilon<N, X> exp(const epsilon<N, X>& x) {
 		epsilon<N, X> res(exp_brute(x[0]));
 		res *= exp_brute(x - epsilon<N, X>(x[0]));
 		return res;
 	}
 
-	inline double exp(const double& x) {
+	/*inline double exp(const double& x) {
 		return ::exp(x);
-	}
+	}*/
 
-	multi_epsilon exp(const multi_epsilon& x) {
+	inline multi_epsilon exp(const multi_epsilon& x) {
 		auto res=::exp(x[0])+0*x;
 		res *= exp_brute(x - x[0]);
 		return res;

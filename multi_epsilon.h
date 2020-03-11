@@ -20,7 +20,7 @@ namespace fms {
 
 		//m variable,  derivatives up to order n
 		multi_epsilon(size_t m = 0, size_t n=0)
-			: m_lpBuf(0.0, pow(n+1,m)), N(n+1), m(m) 
+			: m_lpBuf(0.0, static_cast<size_t>(pow(n+1,m))), N(n+1), m(m) 
 		{};
 
 		multi_epsilon(const multi_epsilon& rhs)
@@ -270,6 +270,13 @@ namespace fms {
 		double norm(double p = 1) const
 		{
 			return std::pow(pow(abs(m_lpBuf), p).sum(), double(1) / p);
+		}
+
+		size_t get_N() const {
+			return this->N;
+		}
+		size_t get_m() const {
+			return this->m;
 		}
 	};
 }

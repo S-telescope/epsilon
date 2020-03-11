@@ -94,9 +94,9 @@ int test_multi_exp() {
 	using X= double;
 	X x = 10;
 	auto x_ = fms::multi_epsilon::identity(2,2)*x;
-	X ex = fms::exp(x);
+	auto ex = fms::exp(x_);
 
-	X dx = ex - ::exp(x);
+	auto dx = ex - ::exp(x);
 	assert(fabs(dx) <= 2 * std::numeric_limits<X>::epsilon());
 
 	auto x__=fms::multi_epsilon({ 10,2,0.1 }, 1, 2);

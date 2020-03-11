@@ -173,6 +173,7 @@
     <ClCompile Include="multinomial.t.cpp" />
     <ClCompile Include="multi_index.t.cpp" />
     <ClCompile Include="norm.t.cpp" />
+    <ClCompile Include="normal.t.cpp" />
     <ClCompile Include="sub.t.cpp" />
   </ItemGroup>
   <ItemGroup>

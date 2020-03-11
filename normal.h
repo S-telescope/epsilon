@@ -1,16 +1,16 @@
 #pragma once
-#pragma once
 #include "epsilon.h"
 #include "exp.h"
 #include <vector>
 #include <cmath>
 #include "corecrt_math_defines.h"
+
 namespace fms {
 	//erf(x)=2/sqrt(pi)*(x-x^3/3+x^5/(5*2!)-x^7/(7*3!)+...
 	template<class X>
 	inline X erf_brute(const X& x)
 	{
-		X ex = 0.0;
+		X ex = 0.0*x;
 		X xn_(x); // x^(2n+1)/(n!*(2n+1))
 
 		int n = 0;
@@ -24,8 +24,8 @@ namespace fms {
 		return M_2_SQRTPI * ex;
 	}
 
-	
-	inline double erf(const double& x) {
+	template<>
+	inline double erf_brute(const double& x) {
 		return std::erf(x);
 	}
 
@@ -44,13 +44,15 @@ namespace fms {
 		auto fe = f(e);
 
 		int n = 1;
-		while (n < N && fabs(Bn_) + X(1) != X(1)) {
+		while (n <= N && fabs(Bn_) + X(1) != X(1)) {
 			res += Bn_ * M_2_SQRTPI * fms::Dexp(n - 1, x[0]);
 			//res += Bn_ * M_2_SQRTPI * fe[n-1];
 			Bn_ *= B / ++n;
 		}
 		return res;
 	}
+
+	
 
 	template<class X>
 	X f(X i) { return exp(-i * i); };
@@ -67,17 +69,36 @@ namespace fms {
 		return res * pow(2.0, (X)N) * ::exp(-x * x) * pow(-x, (X)N);
 	}
 
+	inline multi_epsilon erf(const multi_epsilon& x) {
+		using X=double;
+		multi_epsilon res = erf_brute(x[0]) + 0 * x;
+		auto B = x - x[0];
+
+		auto Bn_(B); // B^n/n!
+
+
+		int n = 1;
+		while (n <= x.get_N() && fabs(Bn_) + X(1) != X(1)) {
+			res += Bn_ * M_2_SQRTPI * Dexp(n - 1, x[0]);
+			Bn_ *= B / ++n;
+		}
+		return res;
+	}
+
 	//PHI(x)=1/2+erf(x/sqrt2)/2
 	template<class X>
 	inline X cdf_brute(const X& x)
 	{
-		return X(0.5) + erf_brute(x * M_SQRT1_2) * 0.5;
+		return 0.5 + erf_brute(x * M_SQRT1_2) * 0.5;
 	}
 
 	template<class X>
-	inline X cdf(const X& x)
+	inline auto cdf(const X& x)
 	{
-		return X(0.5) + erf(x * M_SQRT1_2) * 0.5;
+		return erf(x * M_SQRT1_2) * 0.5 + 0.5;
 	}
+	
+	
 
+	
 }
