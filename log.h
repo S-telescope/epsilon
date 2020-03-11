@@ -16,10 +16,10 @@ namespace fms {
 		X xn_(x - 1); // (1-x)^n / n
 		int n = 1;
 		while (fabs(xn_) + 1 != 1) {
-			++n;
+			
 			ex += xn_ / n;
 			xn_ *= (1-x);
-			
+			++n;
 		}
 
 		return ex;

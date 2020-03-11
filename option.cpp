@@ -53,6 +53,31 @@ X call_strike(X S, X T, X r, X q, X v, X K) {
 	return -exp(-r * T) * cdf(d2);
 }
 
+template <class X>
+X call_gamma(X S, X T, X r, X q, X v, X K) {
+	X d1 = (log(S / K) + (r - q + 0.5 * v * v) * T) / (v * sqrt(T));
+	X phi_d1 = M_2_SQRTPI / 2 * M_SQRT1_2 * exp(-d1 * d1 / 2);
+
+	return exp(-q * T) * phi_d1 / S / v / sqrt(T);
+}
+
+template<class X>
+X bs_call2(X S, double T, double r, double q, double v, double K) {
+	X d1 = (log(S / K) + (r - q + 0.5 * v * v) * T) / (v * sqrt(T));
+	X d2 = (log(S / K) + (r - q - 0.5 * v * v) * T) / (v * sqrt(T));
+	X e1 = exp(-q * T);
+	X e2 = cdf(d1);
+	//return S * exp(-q * T) * cdf(d1) - K * exp(-r * T) * cdf(d2);
+	return d1;
+}
+
+template<class X>
+X call_gamma2(X S, X T, X r, X q, X v, X K) {
+	X d1 = (log(S / K) + (r - q + 0.5 * v * v) * T) / (v * sqrt(T));
+	
+	return -1.0/S/S / v / sqrt(T);
+}
+
 static int test_greeks() {
 	double S = 100;
 	double K = 100;
@@ -60,7 +85,7 @@ static int test_greeks() {
 	double q = 0.005;
 	double v = 0.25;
 	double T = 0.25;
-	auto params = fms::multi_epsilon::add_epsilon({ S,T,r,q,v,K }, 2);
+	auto params = fms::multi_epsilon::add_epsilon({ S,T,r,q,v,K }, 1);
 	auto S_ = params[0];
 	auto T_ = params[1];
 	auto r_ = params[2];
@@ -69,17 +94,26 @@ static int test_greeks() {
 	auto K_ = params[5];
 	auto res = bs_call<fms::multi_epsilon>(S_, T_, r_, q_, v_, K_);
 	
+	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,0,0,0 }, 1)] - bs_call(S, T, r, q, v, K)) <= 2 * std::numeric_limits<double>::epsilon());
 	
-
-	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,0,0,0 }, 2)] - bs_call(S, T, r, q, v, K)) <= 2 * std::numeric_limits<double>::epsilon());
-	assert(fabs(res[fms::multi_epsilon::rep({ 1,0,0,0,0,0 }, 2)] - call_delta(S, T, r, q, v, K)) <= 2 * std::numeric_limits<double>::epsilon());
-	assert(fabs(res[fms::multi_epsilon::rep({ 0,1,0,0,0,0 }, 2)] + call_theta(S, T, r, q, v, K)) <= 8 * std::numeric_limits<double>::epsilon());
-	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,1,0,0,0 }, 2)] - call_rho(S, T, r, q, v, K)) <= 56 * std::numeric_limits<double>::epsilon());
-	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,1,0,0 }, 2)] - call_epsilon(S, T, r, q, v, K)) <= 0 * std::numeric_limits<double>::epsilon());
-	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,0,1,0 }, 2)] - call_vega(S, T, r, q, v, K)) <= 32 * std::numeric_limits<double>::epsilon());
-	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,0,0,1 }, 2)] - call_strike(S, T, r, q, v, K)) <= 1 * std::numeric_limits<double>::epsilon());
+	assert(fabs(res[fms::multi_epsilon::rep({ 1,0,0,0,0,0 }, 1)] - call_delta(S, T, r, q, v, K)) <= 3 * std::numeric_limits<double>::epsilon());
+	assert(fabs(res[fms::multi_epsilon::rep({ 0,1,0,0,0,0 }, 1)] + call_theta(S, T, r, q, v, K)) <= 8 * std::numeric_limits<double>::epsilon());
+	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,1,0,0,0 }, 1)] - call_rho(S, T, r, q, v, K)) <= 56 * std::numeric_limits<double>::epsilon());
+	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,1,0,0 }, 1)] - call_epsilon(S, T, r, q, v, K)) <= 0 * std::numeric_limits<double>::epsilon());
+	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,0,1,0 }, 1)] - call_vega(S, T, r, q, v, K)) <= 32 * std::numeric_limits<double>::epsilon());
+	
+	assert(fabs(res[fms::multi_epsilon::rep({ 0,0,0,0,0,1 }, 1)] - call_strike(S, T, r, q, v, K)) <= 3 * std::numeric_limits<double>::epsilon());
+	
+	auto testgamma= fms::multi_epsilon::add_epsilon({ S}, 2);
+	S_ = testgamma[0];
+	auto res2 = bs_call2(S_, T, r, q, v, K);
+	auto t1 = res2[fms::multi_epsilon::rep({ 2 }, 2)] * 2;
+	auto t2 = call_gamma2(S, T, r, q, v, K);
+	std::cout << (t1 - t2) / std::numeric_limits<double>::epsilon();
 
 	
+	assert(fabs(res2[fms::multi_epsilon::rep({2}, 2)]*2 - call_gamma2(S, T, r, q, v, K)) <= 2 * std::numeric_limits<double>::epsilon());
+
 	return 0;
 }
 static int test_greeks_double = test_greeks();
