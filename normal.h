@@ -68,10 +68,6 @@ namespace fms {
 		auto factorial = [](const size_t& i) {return std::tgamma(i + 1); };
 		X res = 0;
 		for (size_t k = 0; k <= std::floor((X)N / 2.0); k++) {
-			auto a = pow(-4, -1 * k);
-			auto b = pow(x, -2 * k);
-			auto c = factorial(k);
-			auto d = factorial(-2 * k + N);
 			res += pow(-4, -1 * (X)k) * pow(x, -2 * (X)k) / factorial(k) / factorial(-2 * k + N);
 		}
 		return res * pow(2.0, (X)N) * ::exp(-x * x) * pow(-x, (X)N);
@@ -87,7 +83,6 @@ namespace fms {
 
 		int n = 1;
 		while (n <= x.get_N() && fabs(Bn_) + 1 != 1) {
-			auto t = Dexp(n - 1, x[0]);
 			res += Bn_ * M_2_SQRTPI * Dexp(n - 1, x[0]);
 			Bn_ *= B / ++n;
 		}

@@ -302,7 +302,7 @@ inline fms::multi_epsilon operator - (fms::multi_epsilon A, const double& B)
 }
 inline fms::multi_epsilon operator - (const double& B, fms::multi_epsilon A)
 {
-	return A -= B;
+	return -(A -= B);
 }
 inline fms::multi_epsilon operator * (fms::multi_epsilon A, const fms::multi_epsilon& B)
 {
